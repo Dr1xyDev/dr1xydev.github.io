@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr1xy - Dev Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <a href="#home">Dr1xy<span>.dev</span></a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home">Inicio</a></li>
+                <li><a href="#about">Sobre mí</a></li>
+                <li><a href="#projects">Proyectos</a></li>
+                <li><a href="#skills">Habilidades</a></li>
+                <li><a href="#contact">Contacto</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Hola, soy <span>Dr1xy</span></h1>
+                <p class="tagline">Full Stack Developer | Open Source Enthusiast</p>
+                <p class="description">Construyo aplicaciones web modernas y soluciones innovadoras con tecnología de punta.</p>
+                <div class="hero-buttons">
+                    <a href="#projects" class="btn btn-primary">Ver mis proyectos</a>
+                    <a href="#contact" class="btn btn-secondary">Contactarme</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="avatar">
+                    <i class="fas fa-code"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2>Sobre mí</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Soy un desarrollador apasionado por crear soluciones web elegantes y funcionales. Con experiencia en desarrollo full stack, me especializo en JavaScript, React, Node.js y tecnologías modernas.</p>
+                    <p>Me encanta contribuir a proyectos open source y aprender constantemente sobre nuevas tecnologías. Cuando no estoy codificando, puedes encontrarme explorando nuevos frameworks o escribiendo sobre desarrollo web.</p>
+                    <div class="social-links">
+                        <a href="https://github.com/Dr1xyDev" target="_blank" title="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://twitter.com" target="_blank" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://linkedin.com" target="_blank" title="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="mailto:tu-email@ejemplo.com" title="Email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <div class="stats">
+                        <div class="stat-item">
+                            <h3>+5</h3>
+                            <p>Años de experiencia</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>20+</h3>
+                            <p>Proyectos completados</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>100%</h3>
+                            <p>Satisfacción del cliente</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2>Proyectos Destacados</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-image">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>Proyecto 1</h3>
+                    <p>Descripción breve del proyecto. Explica qué hace y qué tecnologías utilizaste.</p>
+                    <div class="project-tags">
+                        <span class="tag">React</span>
+                        <span class="tag">Node.js</span>
+                        <span class="tag">MongoDB</span>
+                    </div>
+                    <a href="#" class="btn btn-small">Ver Proyecto</a>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-image">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <h3>Proyecto 2</h3>
+                    <p>Descripción breve del proyecto. Explica qué hace y qué tecnologías utilizaste.</p>
+                    <div class="project-tags">
+                        <span class="tag">Vue.js</span>
+                        <span class="tag">Express</span>
+                        <span class="tag">PostgreSQL</span>
+                    </div>
+                    <a href="#" class="btn btn-small">Ver Proyecto</a>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-image">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Proyecto 3</h3>
+                    <p>Descripción breve del proyecto. Explica qué hace y qué tecnologías utilizaste.</p>
+                    <div class="project-tags">
+                        <span class="tag">React Native</span>
+                        <span class="tag">Firebase</span>
+                    </div>
+                    <a href="#" class="btn btn-small">Ver Proyecto</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="skills">
+        <div class="container">
+            <h2>Habilidades</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>Frontend</h3>
+                    <ul>
+                        <li>React / Vue.js</li>
+                        <li>HTML5 / CSS3</li>
+                        <li>JavaScript / TypeScript</li>
+                        <li>Tailwind CSS</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>Backend</h3>
+                    <ul>
+                        <li>Node.js / Express</li>
+                        <li>Python / Django</li>
+                        <li>REST APIs</li>
+                        <li>GraphQL</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>Bases de Datos</h3>
+                    <ul>
+                        <li>MongoDB</li>
+                        <li>PostgreSQL</li>
+                        <li>Firebase</li>
+                        <li>Redis</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>Herramientas</h3>
+                    <ul>
+                        <li>Git / GitHub</li>
+                        <li>Docker</li>
+                        <li>AWS / Vercel</li>
+                        <li>Webpack / Vite</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Contacto</h2>
+            <div class="contact-content">
+                <p>¿Te interesa trabajar juntos? No dudes en contactarme.</p>
+                <form class="contact-form" id="contactForm">
+                    <input type="text" placeholder="Tu nombre" required>
+                    <input type="email" placeholder="Tu email" required>
+                    <textarea placeholder="Tu mensaje" rows="5" required></textarea>
+                    <button type="submit" class="btn btn-primary">Enviar mensaje</button>
+                </form>
+                <div class="contact-links">
+                    <a href="mailto:tu-email@ejemplo.com">
+                        <i class="fas fa-envelope"></i> Email
+                    </a>
+                    <a href="https://github.com/Dr1xyDev" target="_blank">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                    <a href="https://twitter.com" target="_blank">
+                        <i class="fab fa-twitter"></i> Twitter
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Dr1xy. Todos los derechos reservados.</p>
+            <div class="footer-links">
+                <a href="#home">Inicio</a>
+                <a href="#projects">Proyectos</a>
+                <a href="#contact">Contacto</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
