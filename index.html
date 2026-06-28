@@ -1,608 +1,612 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html><html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dr1xyDev - Dev Portfolio</title>
-    <style>
-        :root {
-            --primary: #050814;
-            --secondary: #0a0e27;
-            --tertiary: #12183b;
-            --accent: #00d4ff;
-            --accent-light: #00f0ff;
-            --gold: #ffd700;
-            --gold-light: #ffed4e;
-            --text: #e0e0e0;
-            --text-muted: #a0a0a0;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0a0e27" />
+  <title>Dr1xyDev — Dev Portfolio</title>
+  <style>
+    :root{
+      --bg:#060814;
+      --bg2:#0a0e27;
+      --bg3:#12183a;
+      --card:rgba(10,14,39,.72);
+      --line:rgba(0,212,255,.28);
+      --cyan:#00d4ff;
+      --cyan2:#7cf3ff;
+      --gold:#ffd700;
+      --gold2:#ffef7a;
+      --text:#e7f1ff;
+      --muted:#9db0ca;
+      --shadow:0 0 18px rgba(0,212,255,.18), 0 0 42px rgba(0,212,255,.08);
+      --radius:22px;
+    }*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+  background:
+    radial-gradient(circle at top, rgba(0,212,255,.14), transparent 32%),
+    radial-gradient(circle at 20% 20%, rgba(255,215,0,.08), transparent 20%),
+    linear-gradient(135deg, var(--bg) 0%, var(--bg2) 48%, var(--bg3) 100%);
+  color:var(--text);
+  overflow-x:hidden;
+  min-height:100vh;
+}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+body::before{
+  content:"";
+  position:fixed; inset:0;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size: 42px 42px;
+  opacity:.18;
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,.95), rgba(0,0,0,.35));
+}
 
-        html {
-            scroll-behavior: smooth;
-        }
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:22px}
 
-        body {
-            font-family: 'Courier New', 'Courier', monospace;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--tertiary) 100%);
-            background-attachment: fixed;
-            color: var(--text);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+/* Loading */
+.loading{
+  position:fixed; inset:0; z-index:9999;
+  display:grid; place-items:center;
+  background:linear-gradient(135deg, #050713, #0a1030 55%, #050713);
+  transition:opacity .5s ease, visibility .5s ease;
+}
+.loading.hidden{opacity:0; visibility:hidden; pointer-events:none}
+.loading-card{
+  text-align:center;
+  padding:34px 28px;
+  border:1px solid var(--line);
+  border-radius:24px;
+  background:rgba(7,10,24,.75);
+  box-shadow:var(--shadow);
+  backdrop-filter: blur(12px);
+}
+.loading-title{
+  font-size:clamp(1.6rem, 4vw, 3rem);
+  color:var(--cyan);
+  text-shadow:0 0 10px rgba(0,212,255,.9), 0 0 24px rgba(0,212,255,.35);
+  letter-spacing:2px;
+  animation:flicker 1.5s infinite;
+}
+.loading-dots{display:flex; justify-content:center; gap:12px; margin-top:18px}
+.loading-dots span{
+  width:12px;height:12px;border-radius:50%;
+  background:var(--gold);
+  box-shadow:0 0 18px rgba(255,215,0,.95);
+  animation:bounce 1s infinite ease-in-out;
+}
+.loading-dots span:nth-child(2){animation-delay:.15s}
+.loading-dots span:nth-child(3){animation-delay:.3s}
 
-        /* Loading Screen */
-        .loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--primary);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease;
-        }
+/* Hero */
+.hero{
+  min-height:100vh;
+  display:grid;
+  align-items:center;
+  position:relative;
+  padding:30px 0 48px;
+}
+.hero-grid{
+  display:grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap:26px;
+  align-items:center;
+}
+.hero-card, .glass-card{
+  background:linear-gradient(180deg, rgba(10,14,39,.82), rgba(10,14,39,.6));
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  backdrop-filter: blur(12px);
+}
+.hero-card{
+  padding:34px;
+  position:relative;
+  overflow:hidden;
+}
+.hero-card::after{
+  content:"";
+  position:absolute; inset:auto -40% -60% auto;
+  width:320px; height:320px;
+  background:radial-gradient(circle, rgba(0,212,255,.18), transparent 60%);
+  filter: blur(2px);
+  pointer-events:none;
+}
+.tagline{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  color:var(--gold2);
+  border:1px solid rgba(255,215,0,.25);
+  background:rgba(255,215,0,.06);
+  padding:8px 14px;
+  border-radius:999px;
+  letter-spacing:1px;
+  margin-bottom:18px;
+  text-transform:uppercase;
+  font-size:.8rem;
+}
+.title{
+  font-size:clamp(2.5rem, 7vw, 5.2rem);
+  line-height: .95;
+  letter-spacing: 4px;
+  text-transform:uppercase;
+  color:var(--cyan);
+  text-shadow:0 0 10px rgba(0,212,255,.9), 0 0 32px rgba(0,212,255,.25), 3px 0 0 var(--gold), -3px 0 0 rgba(255,215,0,.4);
+  margin-bottom:14px;
+}
+.subtitle{
+  color:var(--muted);
+  font-size:1.02rem;
+  max-width:62ch;
+  line-height:1.75;
+  margin-bottom:28px;
+}
+.actions{display:flex;flex-wrap:wrap;gap:14px}
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  text-decoration:none;
+  padding:14px 18px;
+  border-radius:16px;
+  border:1px solid var(--line);
+  background:rgba(0,212,255,.06);
+  color:var(--text);
+  transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease, background .25s ease;
+  box-shadow:0 0 0 rgba(0,0,0,0);
+  font-weight:700;
+  letter-spacing:.3px;
+}
+.btn:hover{transform:translateY(-2px);border-color:rgba(124,243,255,.55);box-shadow:var(--shadow);background:rgba(0,212,255,.11)}
+.btn.yt{background:rgba(255,0,0,.14); border-color: rgba(255,100,100,.5)}
+.btn.yt:hover{background:rgba(255,0,0,.22)}
+.btn .icon{font-size:1.15rem}
 
-        .loading-text {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--accent);
-            text-shadow: 0 0 20px var(--accent), 0 0 40px var(--accent-light);
-            letter-spacing: 5px;
-            animation: pulse-glow 1.5s infinite alternate;
-        }
+.profile{
+  padding:24px;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.avatar-wrap{
+  position:relative;
+  width:220px;height:220px;
+  margin-bottom:18px;
+  display:grid;place-items:center;
+}
+.avatar-wrap::before{
+  content:"";
+  position:absolute; inset:-12px;
+  border-radius:50%;
+  background:conic-gradient(from 180deg, rgba(0,212,255,.9), rgba(255,215,0,.95), rgba(0,212,255,.8));
+  filter: blur(10px);
+  opacity:.55;
+  animation:spin 8s linear infinite;
+}
+.avatar{
+  position:relative;
+  width:200px;height:200px;
+  border-radius:50%;
+  object-fit:cover;
+  border:3px solid rgba(255,255,255,.14);
+  box-shadow:0 0 0 6px rgba(0,212,255,.08), 0 0 25px rgba(0,212,255,.35);
+  background:#081022;
+}
+.profile h2{
+  font-size:1.2rem;
+  letter-spacing:2px;
+  color:var(--gold2);
+  margin-bottom:8px;
+}
+.profile p{color:var(--muted);line-height:1.7}
 
-        @keyframes pulse-glow {
-            from { text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent); }
-            to { text-shadow: 0 0 20px var(--accent), 0 0 40px var(--accent-light), 0 0 60px var(--accent); }
-        }
+/* Sections */
+.section{
+  margin:22px 0 0;
+  padding:26px;
+  border-radius:var(--radius);
+  background:rgba(7,10,24,.54);
+  border:1px solid rgba(0,212,255,.18);
+  box-shadow:var(--shadow);
+  backdrop-filter: blur(10px);
+  opacity:0;
+  transform: translateY(18px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+.section.show{opacity:1; transform: translateY(0)}
+.section-head{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  margin-bottom:18px;
+}
+.section-mark{
+  color:var(--gold2);
+  text-shadow:0 0 10px rgba(255,215,0,.45);
+  font-weight:900;
+  letter-spacing:3px;
+}
+.section-head h3{
+  color:var(--cyan);
+  font-size:1.35rem;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+.section-text{color:var(--text);line-height:1.9}
+.section-text strong{color:var(--gold2)}
 
-        /* Main Container */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            opacity: 0;
-            transition: opacity 1s ease-in;
-        }
+/* Skills */
+.skills-grid{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0,1fr));
+  gap:18px;
+}
+.skill-card{
+  position:relative;
+  background:rgba(8,12,28,.76);
+  border:1px solid rgba(0,212,255,.2);
+  border-radius:18px;
+  padding:18px;
+  overflow:hidden;
+}
+.skill-top{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:12px}
+.skill-name{font-size:1rem;font-weight:800;letter-spacing:1px;color:var(--cyan2)}
+.skill-perc{color:var(--gold2);font-weight:900}
+.bar{
+  position:relative;
+  height:18px;
+  border-radius:999px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,215,0,.18);
+  overflow:hidden;
+  box-shadow: inset 0 0 12px rgba(0,0,0,.35);
+}
+.bar-fill{
+  position:absolute; inset:0 auto 0 0;
+  width:0;
+  border-radius:inherit;
+  background:linear-gradient(90deg, #cfa300, #ffd700 35%, #fff09b 55%, #ffd700 100%);
+  box-shadow: 0 0 16px rgba(255,215,0,.52), inset 0 0 10px rgba(255,255,255,.2);
+}
+.bar-fill::after{
+  content:"";
+  position:absolute; inset:0;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.4), transparent);
+  transform:translateX(-100%);
+  animation:shine 1.6s linear infinite;
+}
+.sparkles{position:absolute; inset:0; pointer-events:none; overflow:hidden}
+.sparkles i{
+  position:absolute; bottom:50%; left:var(--x);
+  width:4px; height:4px; border-radius:50%;
+  background:var(--gold2);
+  box-shadow:0 0 10px rgba(255,215,0,.95);
+  opacity:0;
+  animation: spark 1.35s ease-out infinite;
+  animation-delay: var(--d);
+}
 
-        /* Header/Hero */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
+/* Knowledge cards */
+.info-grid{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap:16px;
+}
+.info-card{
+  background:rgba(8,12,28,.74);
+  border:1px solid rgba(0,212,255,.2);
+  border-radius:18px;
+  padding:18px;
+  min-height: 150px;
+}
+.info-card h4{
+  color:var(--gold2);
+  margin-bottom:10px;
+  font-size:1.05rem;
+}
+.info-card p{color:var(--muted);line-height:1.75}
 
-        .hero-content {
-            text-align: center;
-            position: relative;
-            z-index: 1;
-            animation: slideUp 0.8s ease-out forwards;
-        }
+/* Projects */
+.projects{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:16px;
+}
+.project{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:16px;
+  align-items:center;
+  text-decoration:none;
+  color:inherit;
+  padding:20px;
+  border-radius:18px;
+  background:linear-gradient(180deg, rgba(10,14,39,.78), rgba(10,14,39,.58));
+  border:1px solid rgba(0,212,255,.22);
+  transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+  position:relative;
+  overflow:hidden;
+}
+.project::before{
+  content:"";
+  position:absolute; inset:0;
+  background:linear-gradient(90deg, transparent, rgba(0,212,255,.08), transparent);
+  transform:translateX(-120%);
+  transition:transform .8s ease;
+}
+.project:hover{transform:translateY(-3px);border-color:rgba(255,215,0,.4);box-shadow:var(--shadow)}
+.project:hover::before{transform:translateX(120%)}
+.project h4{font-size:1.1rem;color:var(--cyan2);letter-spacing:1px;margin-bottom:8px}
+.project p{color:var(--text);line-height:1.8}
+.chip{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:8px 12px;border-radius:999px;
+  background:rgba(255,215,0,.12);
+  border:1px solid rgba(255,215,0,.25);
+  color:var(--gold2);
+  font-size:.85rem;
+  white-space:nowrap;
+  height:fit-content;
+  margin-top:4px;
+}
 
-        .profile-pic {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            border: 3px solid var(--accent);
-            margin-bottom: 25px;
-            box-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
-            animation: float 4s ease-in-out infinite;
-            object-fit: cover;
-        }
+.footer{
+  text-align:center;
+  padding:28px 8px 10px;
+  color:var(--muted);
+  line-height:1.8;
+}
+.footer a{color:var(--cyan2);text-decoration:none}
+.footer a:hover{text-decoration:underline}
 
-        .cyberpunk-title {
-            font-size: clamp(2.5rem, 8vw, 5rem);
-            font-weight: bold;
-            color: var(--accent);
-            text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent), -3px -3px 0 var(--gold), 3px 3px 0 var(--gold);
-            letter-spacing: 5px;
-            margin-bottom: 10px;
-            animation: glitch 3s infinite;
-        }
+/* Floating particles */
+.bg-particles{
+  position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:-1;
+}
+.bg-particles span{
+  position:absolute; bottom:-20px;
+  width:3px;height:3px;border-radius:50%;
+  background:rgba(124,243,255,.7);
+  box-shadow:0 0 12px rgba(0,212,255,.45);
+  animation: rise linear infinite;
+  opacity:.45;
+}
 
-        .subtitle {
-            font-size: 1.3rem;
-            color: var(--gold);
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px var(--gold);
-            margin-bottom: 40px;
-        }
+/* Responsive */
+@media (max-width: 900px){
+  .hero-grid,.skills-grid,.info-grid{grid-template-columns:1fr}
+  .project{grid-template-columns:1fr}
+}
+@media (max-width: 560px){
+  .wrap{padding:14px}
+  .hero-card,.section{padding:18px}
+  .avatar-wrap{width:180px;height:180px}
+  .avatar{width:162px;height:162px}
+  .title{letter-spacing:2px}
+}
 
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            padding: 15px 35px;
-            border: 2px solid var(--accent);
-            background: transparent;
-            color: var(--accent);
-            text-decoration: none;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            letter-spacing: 2px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
-        }
+@keyframes bounce{0%,80%,100%{transform:translateY(0) scale(.78)}40%{transform:translateY(-8px) scale(1)}}
+@keyframes flicker{0%,100%{opacity:1}50%{opacity:.78}52%{opacity:.5}54%{opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shine{to{transform:translateX(100%)}}
+@keyframes spark{0%{transform:translate(0,0) scale(.6);opacity:0}20%{opacity:1}100%{transform:translate(calc(var(--dx) * 1px), calc(var(--dy) * -1px)) scale(1.2);opacity:0}}
+@keyframes rise{0%{transform:translateY(0) translateX(0);opacity:0}10%{opacity:.7}100%{transform:translateY(-115vh) translateX(40px);opacity:0}}
 
-        .youtube-btn {
-            border-color: #ff0000;
-            color: #fff;
-            text-shadow: 0 0 5px #fff;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
-        }
+/* reduced motion */
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none !important;transition:none !important}
+}
 
-        .youtube-btn::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,0,0,0.4), #ff0000);
-            transition: left 0.4s ease;
-            z-index: -1;
-        }
-
-        .youtube-btn:hover {
-            box-shadow: 0 0 30px #ff0000;
-        }
-        
-        .youtube-btn:hover::before {
-            left: 0;
-        }
-
-        /* Sections */
-        section {
-            margin: 100px 0;
-            padding: 60px 40px;
-            position: relative;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-        
-        section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            margin-bottom: 50px;
-            display: flex;
-            align-items: center;
-        }
-
-        .title-prefix {
-            color: var(--accent);
-            font-size: 3rem;
-            margin-right: 20px;
-            text-shadow: 0 0 10px var(--accent);
-        }
-
-        .section-title h2 {
-            color: var(--accent);
-            letter-spacing: 3px;
-            text-shadow: 0 0 15px var(--accent);
-            font-size: 2rem;
-            text-transform: uppercase;
-        }
-
-        /* About Section */
-        .about {
-            background: rgba(10, 14, 39, 0.7);
-            border-left: 4px solid var(--accent);
-            box-shadow: 0 0 30px rgba(0, 212, 255, 0.05);
-        }
-
-        .about-content p {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            margin-bottom: 15px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        /* Skills Section */
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-        }
-
-        .skill-item {
-            background: rgba(18, 24, 59, 0.6);
-            padding: 25px;
-            border: 1px solid var(--accent);
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
-        }
-
-        .skill-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-
-        .skill-name {
-            font-weight: bold;
-            color: var(--accent);
-            letter-spacing: 2px;
-        }
-
-        .skill-percentage {
-            color: var(--gold);
-            font-weight: bold;
-        }
-
-        .skill-bar-container {
-            width: 100%;
-            height: 25px;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .skill-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #b8860b 0%, var(--gold) 50%, var(--gold-light) 100%);
-            width: 0; /* Starts at 0 for animation */
-            position: relative;
-            box-shadow: 0 0 15px var(--gold);
-            transition: width 1.5s cubic-bezier(0.1, 0.5, 0.1, 1);
-        }
-
-        /* Expertise Cards */
-        .expertise-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-        }
-
-        .expertise-card {
-            background: rgba(10, 14, 39, 0.8);
-            padding: 30px;
-            border: 1px solid var(--accent);
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
-
-        .expertise-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--gold);
-            box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
-        }
-
-        .expertise-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
-        }
-
-        .expertise-card h3 {
-            color: var(--gold);
-            margin-bottom: 15px;
-            letter-spacing: 1px;
-        }
-
-        /* Projects */
-        .project-card {
-            display: block;
-            background: rgba(10, 14, 39, 0.8);
-            border: 1px solid var(--accent);
-            padding: 30px;
-            text-decoration: none;
-            color: var(--text);
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .project-card:hover {
-            border-color: var(--gold);
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
-            transform: translateY(-5px);
-        }
-
-        .project-header h3 {
-            color: var(--accent);
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-        }
-
-        .project-tag {
-            background: var(--gold);
-            color: var(--primary);
-            padding: 3px 10px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            display: inline-block;
-            margin-bottom: 15px;
-        }
-        
-        .tech-stack {
-            display: block;
-            margin-top: 20px;
-            color: var(--gold-light);
-            font-size: 0.9rem;
-            border-top: 1px solid rgba(0, 212, 255, 0.3);
-            padding-top: 15px;
-        }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 40px;
-            border-top: 1px solid var(--accent);
-            color: var(--text-muted);
-        }
-        .footer a {
-            color: var(--accent);
-            text-decoration: none;
-        }
-
-        /* Animations */
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes glitch {
-            0%, 100% { text-shadow: 0 0 10px var(--accent), -2px -2px 0 var(--gold); }
-            50% { text-shadow: 0 0 20px var(--accent), 2px 2px 0 #ff003c; }
-        }
-
-        /* Particles */
-        .particle {
-            position: absolute;
-            background: var(--gold-light);
-            border-radius: 50%;
-            pointer-events: none;
-            box-shadow: 0 0 8px var(--gold);
-            animation: fadeOutParticle 1s forwards;
-        }
-
-        @keyframes fadeOutParticle {
-            0% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0; transform: scale(0) translate(20px, -20px); }
-        }
-        
-        @media (max-width: 768px) {
-            .cyberpunk-title { font-size: 2.5rem; }
-            section { padding: 40px 20px; }
-            .section-title { flex-direction: column; align-items: flex-start; }
-            .title-prefix { margin-bottom: 10px; }
-        }
-    </style>
+  </style>
 </head>
 <body>
+  <div class="loading" id="loadingScreen">
+    <div class="loading-card">
+      <div class="loading-title">Cargando :).....</div>
+      <div class="loading-dots"><span></span><span></span><span></span></div>
+    </div>
+  </div>  <div class="bg-particles" id="bgParticles"></div>  <main class="wrap" id="mainContent">
+    <section class="hero">
+      <div class="hero-grid">
+        <article class="hero-card reveal">
+          <div class="tagline">Dev Blog · Cyberpunk · Blue Neon</div>
+          <h1 class="title">Dr1xyDev</h1>
+          <p class="subtitle">
+            Bienvenido a mi portfolio de desarrollo. Aquí muestro lo que sé hacer, lo que estoy aprendiendo y algunos de mis proyectos.
+            Me gusta crear cosas para Minecraft PE, experimentar con Godot y seguir mejorando como programador.
+          </p>
+          <div class="actions">
+            <a class="btn yt" href="https://www.youtube.com/@Dr1xyDev" target="_blank" rel="noopener noreferrer">
+              <span class="icon">▶</span> YouTube
+            </a>
+            <a class="btn" href="#projects"><span class="icon">⌁</span> Ver proyectos</a>
+            <a class="btn" href="#skills"><span class="icon">▣</span> Habilidades</a>
+          </div>
+        </article><aside class="hero-card profile reveal">
+      <div class="avatar-wrap">
+        <img class="avatar" src="https://github.com/Dr1xyDev.png?size=400" alt="Foto de perfil de Dr1xyDev" />
+      </div>
+      <h2>@Dr1xyDev</h2>
+      <p>Programador / Desarrollador<br>MCPE · PocketMine · Web · GDScript</p>
+    </aside>
+  </div>
+</section>
 
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loading-text">Cargando :).....</div>
+<section class="section reveal" id="about">
+  <div class="section-head">
+    <span class="section-mark">//</span>
+    <h3>Presentación</h3>
+  </div>
+  <div class="section-text">
+    Soy <strong>Dr1xyDev</strong>, un desarrollador que disfruta crear proyectos para servidores de Minecraft, probar ideas nuevas y construir interfaces con estilo llamativo.
+    Me enfoco en seguir aprendiendo y mejorando poco a poco, con interés en programación, desarrollo web y herramientas para videojuegos.
+  </div>
+</section>
+
+<section class="section reveal" id="skills">
+  <div class="section-head">
+    <span class="section-mark">//</span>
+    <h3>Lenguajes de programación aprendidos</h3>
+  </div>
+
+  <div class="skills-grid">
+    <div class="skill-card skill" data-percent="76">
+      <div class="sparkles">
+        <i style="--x:12%;--d:0s;--dx:10;--dy:28"></i>
+        <i style="--x:38%;--d:.25s;--dx:-6;--dy:22"></i>
+        <i style="--x:64%;--d:.5s;--dx:8;--dy:30"></i>
+        <i style="--x:84%;--d:.75s;--dx:-10;--dy:26"></i>
+      </div>
+      <div class="skill-top"><span class="skill-name">PHP</span><span class="skill-perc">76%</span></div>
+      <div class="bar"><div class="bar-fill"></div></div>
     </div>
 
-    <div class="container" id="mainContent">
-        
-        <header class="hero">
-            <div class="hero-content">
-                <img src="https://avatars.githubusercontent.com/u/93453212?v=4" alt="Dr1xyDev" class="profile-pic">
-                <h1 class="cyberpunk-title">DR1XYDEV</h1>
-                <p class="subtitle">Dev Blog | Programmer | Gamer</p>
-                <div class="social-buttons">
-                    <a href="https://www.youtube.com/@Dr1xyDev" target="_blank" class="btn youtube-btn">
-                        ▶ YouTube Channel
-                    </a>
-                </div>
-            </div>
-        </header>
-
-        <section class="about" id="about">
-            <div class="section-title">
-                <span class="title-prefix">//</span>
-                <h2>Presentación</h2>
-            </div>
-            <div class="about-content">
-                <p>Hola, soy Luis. Soy un desarrollador apasionado por la programación, la modificación de cores y la creación de entornos interactivos. Tengo una fuerte inclinación hacia el backend, el scripting de servidores y actualmente me encuentro explorando a fondo el fascinante mundo del desarrollo de videojuegos.</p>
-                <p>Me gusta experimentar con nuevas mecánicas de supervivencia, exprimir el rendimiento del código y siempre estoy buscando aprender herramientas nuevas para darle vida a mis ideas.</p>
-            </div>
-        </section>
-
-        <section class="skills" id="skills">
-            <div class="section-title">
-                <span class="title-prefix">//</span>
-                <h2>Lenguajes de Programación</h2>
-            </div>
-            <div class="skills-grid">
-                <div class="skill-item">
-                    <div class="skill-header">
-                        <span class="skill-name">PHP</span>
-                        <span class="skill-percentage">76%</span>
-                    </div>
-                    <div class="skill-bar-container">
-                        <div class="skill-bar" data-width="76%"></div>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-header">
-                        <span class="skill-name">GDScript</span>
-                        <span class="skill-percentage">26%</span>
-                    </div>
-                    <div class="skill-bar-container">
-                        <div class="skill-bar" data-width="26%"></div>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-header">
-                        <span class="skill-name">HTML / CSS</span>
-                        <span class="skill-percentage">45%</span>
-                    </div>
-                    <div class="skill-bar-container">
-                        <div class="skill-bar" data-width="45%"></div>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-header">
-                        <span class="skill-name">JavaScript</span>
-                        <span class="skill-percentage">15%</span>
-                    </div>
-                    <div class="skill-bar-container">
-                        <div class="skill-bar" data-width="15%"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="expertise" id="expertise">
-            <div class="section-title">
-                <span class="title-prefix">//</span>
-                <h2>Conocimientos</h2>
-            </div>
-            <div class="expertise-grid">
-                <div class="expertise-card">
-                    <div class="expertise-icon">🎮</div>
-                    <h3>Godot Engine</h3>
-                    <p>Novato en el entorno del Motor de Videojuegos Godot. Actualmente aprendiendo físicas, mecánicas de supervivencia y programación con GDScript.</p>
-                </div>
-                <div class="expertise-card">
-                    <div class="expertise-icon">🧊</div>
-                    <h3>Modelado 3D</h3>
-                    <p>Conocimientos básicos (sé poco aún) de modelado 3D, enfocado en aprender a texturizar y crear assets elementales para videojuegos.</p>
-                </div>
-                <div class="expertise-card">
-                    <div class="expertise-icon">⚙️</div>
-                    <h3>Server Cores</h3>
-                    <p>Experiencia modificando estructuras y cores, optimización de sistemas y generación de mundos en entornos de servidores.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="projects" id="projects">
-            <div class="section-title">
-                <span class="title-prefix">//</span>
-                <h2>Proyectos Destacados</h2>
-            </div>
-            <div class="projects-grid">
-                <a href="https://github.com/Dr1xyDev/Syrim-PMMP-Legacy" target="_blank" class="project-card">
-                    <div class="project-header">
-                        <h3>Syrim-PMMP-Legacy</h3>
-                    </div>
-                    <span class="project-tag">PocketMine-MP</span>
-                    <p>Proyecto de PocketMine-MP vanilla para MCPE 1.1.5. Cuenta con generación vanilla precisa y está repleto de muchas características nuevas y sistemas mejorados.</p>
-                    <span class="tech-stack">Tecnologías: PHP • API 3.0.0</span>
-                </a>
-            </div>
-        </section>
-
-        <footer class="footer">
-            <p>© 2024 Dr1xyDev. Estilo Ciberpunk activado.</p>
-            <p><a href="https://www.youtube.com/@Dr1xyDev" target="_blank">YouTube</a> | <a href="https://github.com/Dr1xyDev" target="_blank">GitHub</a></p>
-        </footer>
-
+    <div class="skill-card skill" data-percent="26">
+      <div class="sparkles">
+        <i style="--x:18%;--d:0s;--dx:10;--dy:22"></i>
+        <i style="--x:51%;--d:.2s;--dx:-8;--dy:18"></i>
+        <i style="--x:76%;--d:.55s;--dx:9;--dy:24"></i>
+        <i style="--x:88%;--d:.85s;--dx:-8;--dy:20"></i>
+      </div>
+      <div class="skill-top"><span class="skill-name">GDScript</span><span class="skill-perc">26%</span></div>
+      <div class="bar"><div class="bar-fill"></div></div>
     </div>
+  </div>
+</section>
 
-    <script>
-        // 1. Lógica de la pantalla de carga inicial
-        window.addEventListener('load', () => {
-            const loadingScreen = document.getElementById('loadingScreen');
-            const mainContent = document.getElementById('mainContent');
-            
-            // Simular un tiempo mínimo de carga para el efecto ciberpunk
-            setTimeout(() => {
-                loadingScreen.style.opacity = '0';
-                setTimeout(() => {
-                    loadingScreen.style.display = 'none';
-                    mainContent.style.opacity = '1';
-                    
-                    // Inicializar animaciones de scroll justo después de cargar
-                    initScrollAnimations();
-                }, 500);
-            }, 1500); 
-        });
+<section class="section reveal" id="experience">
+  <div class="section-head">
+    <span class="section-mark">//</span>
+    <h3>Entorno y conocimientos</h3>
+  </div>
+  <div class="info-grid">
+    <article class="info-card">
+      <h4>Godot Engine</h4>
+      <p>Soy novato en el entorno del motor de videojuegos Godot Engine, pero sigo aprendiendo cómo hacer juegos y prototipos con GDScript.</p>
+    </article>
+    <article class="info-card">
+      <h4>Modelado 3D</h4>
+      <p>Sé poco de modelado 3D, aunque me interesa mejorar en creación de objetos, formas simples y recursos para juegos.</p>
+    </article>
+    <article class="info-card">
+      <h4>Enfoque actual</h4>
+      <p>Me gusta combinar programación con ideas visuales, interfaces modernas y proyectos prácticos que puedan crecer con el tiempo.</p>
+    </article>
+  </div>
+</section>
 
-        // 2. Generador de Partículas para las barras de progreso
-        function spawnParticles(barElement) {
-            // Detener si la barra no está activa
-            if(barElement.style.width === '0px' || barElement.style.width === '') return;
-            
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            
-            // Tamaño aleatorio
-            const size = Math.random() * 4 + 2;
-            particle.style.width = `${size}px`;
-            particle.style.height = `${size}px`;
-            
-            // Posición al final de la barra actual
-            particle.style.right = '0px';
-            particle.style.top = `${Math.random() * 20}px`;
-            
-            barElement.appendChild(particle);
-            
-            // Limpiar la partícula del DOM después de la animación
-            setTimeout(() => {
-                particle.remove();
-            }, 1000);
+<section class="section reveal" id="projects">
+  <div class="section-head">
+    <span class="section-mark">//</span>
+    <h3>Proyectos que hice</h3>
+  </div>
+
+  <div class="projects">
+    <a class="project" href="https://github.com/Dr1xyDev/Syrim-PMMP-Legacy" target="_blank" rel="noopener noreferrer">
+      <div>
+        <h4>Syrim-PMMP-Legacy</h4>
+        <p>
+          Mi proyecto de PocketMine-MP vanilla para MCPE 1.1.5, con generación vanilla y muchas características nuevas.
+          Es una base pensada para servidores personalizados y mejoras en el juego.
+        </p>
+      </div>
+      <div class="chip">GitHub →</div>
+    </a>
+  </div>
+</section>
+
+<footer class="footer reveal">
+  <p>Hecho con estilo cyberpunk en azul, celeste, negro y dorado.</p>
+  <p>
+    GitHub: <a href="https://github.com/Dr1xyDev" target="_blank" rel="noopener noreferrer">Dr1xyDev</a>
+    · YouTube: <a href="https://www.youtube.com/@Dr1xyDev" target="_blank" rel="noopener noreferrer">@Dr1xyDev</a>
+  </p>
+</footer>
+
+  </main>  <script>
+    const loadingScreen = document.getElementById('loadingScreen');
+    const revealEls = document.querySelectorAll('.reveal');
+    const skillCards = document.querySelectorAll('.skill');
+
+    function fillBar(card){
+      const percent = card.dataset.percent || '0';
+      const bar = card.querySelector('.bar-fill');
+      if (!bar) return;
+      bar.style.width = '0%';
+      requestAnimationFrame(() => {
+        bar.style.transition = 'width 1.6s cubic-bezier(.2,.8,.2,1)';
+        bar.style.width = percent + '%';
+      });
+    }
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+          if (entry.target.classList.contains('skill')) fillBar(entry.target);
         }
+      });
+    }, { threshold: 0.2 });
 
-        // 3. Observer para animar las barras de porcentaje y las secciones (aparecer/desaparecer)
-        function initScrollAnimations() {
-            const sections = document.querySelectorAll('section');
-            const skillBars = document.querySelectorAll('.skill-bar');
-            
-            // Intervalo global para las partículas
-            let particleInterval;
+    revealEls.forEach(el => io.observe(el));
 
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    // Animación de aparición de secciones
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        
-                        // Si es la sección de skills, animamos las barras
-                        if (entry.target.id === 'skills') {
-                            skillBars.forEach(bar => {
-                                const targetWidth = bar.getAttribute('data-width');
-                                bar.style.width = targetWidth;
-                            });
-                            
-                            // Activar emisión de partículas
-                            if(!particleInterval) {
-                                particleInterval = setInterval(() => {
-                                    skillBars.forEach(bar => spawnParticles(bar));
-                                }, 150);
-                            }
-                        }
-                    } else {
-                        // Animación de desaparición de secciones (para que se vuelva a llenar al bajar y subir)
-                        entry.target.classList.remove('visible');
-                        
-                        if (entry.target.id === 'skills') {
-                            skillBars.forEach(bar => {
-                                bar.style.width = '0'; // Reiniciar barras
-                            });
-                            
-                            // Detener partículas
-                            clearInterval(particleInterval);
-                            particleInterval = null;
-                        }
-                    }
-                });
-            }, { threshold: 0.15 });
+    function createBackgroundParticles(){
+      const holder = document.getElementById('bgParticles');
+      const count = 28;
+      for (let i = 0; i < count; i++) {
+        const dot = document.createElement('span');
+        const left = Math.random() * 100;
+        const duration = 8 + Math.random() * 10;
+        const delay = Math.random() * 8;
+        const size = 2 + Math.random() * 3;
+        dot.style.left = left + 'vw';
+        dot.style.width = size + 'px';
+        dot.style.height = size + 'px';
+        dot.style.animationDuration = duration + 's';
+        dot.style.animationDelay = '-' + delay + 's';
+        dot.style.opacity = 0.15 + Math.random() * 0.45;
+        holder.appendChild(dot);
+      }
+    }
 
-            sections.forEach(section => observer.observe(section));
-        }
-    </script>
-</body>
+    createBackgroundParticles();
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        loadingScreen.classList.add('hidden');
+      }, 1800);
+    });
+
+    // tiny particle bursts over the skill bars
+    function burst(container){
+      const sparkle = document.createElement('span');
+      const x = 10 + Math.random() * 80;
+      const dx = (Math.random() * 70 - 35).toFixed(1);
+      const dy = (18 + Math.random() * 28).toFixed(1);
+      sparkle.style.cssText = `
+        position:absolute;
+        left:${x}%;
+        bottom:38%;
+        width:5px;height:5px;border-radius:50%;
+        background:#fff09b;
+        box-shadow:0 0 12px rgba(255,215,0,.95);
+        pointer-events:none;
+        --dx:${dx};
+        --dy:${dy};
+        animation:spark 1.2s ease-out forwards;
+      `;
+      container.appendChild(sparkle);
+      setTimeout(() => sparkle.remove(), 1200);
+    }
+
+    skillCards.forEach(card => {
+      const timer = setInterval(() => {
+        if (card.classList.contains('show')) burst(card);
+      }, 360);
+      card.addEventListener('mouseleave', () => clearInterval(timer));
+    });
+  </script></body>
 </html>
