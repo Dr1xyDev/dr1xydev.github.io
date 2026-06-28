@@ -4,59 +4,426 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dr1xyDev - Dev Portfolio</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        :root {
+            --primary: #050814;
+            --secondary: #0a0e27;
+            --tertiary: #12183b;
+            --accent: #00d4ff;
+            --accent-light: #00f0ff;
+            --gold: #ffd700;
+            --gold-light: #ffed4e;
+            --text: #e0e0e0;
+            --text-muted: #a0a0a0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Courier New', 'Courier', monospace;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--tertiary) 100%);
+            background-attachment: fixed;
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-text {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--accent);
+            text-shadow: 0 0 20px var(--accent), 0 0 40px var(--accent-light);
+            letter-spacing: 5px;
+            animation: pulse-glow 1.5s infinite alternate;
+        }
+
+        @keyframes pulse-glow {
+            from { text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent); }
+            to { text-shadow: 0 0 20px var(--accent), 0 0 40px var(--accent-light), 0 0 60px var(--accent); }
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 1s ease-in;
+        }
+
+        /* Header/Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            animation: slideUp 0.8s ease-out forwards;
+        }
+
+        .profile-pic {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 3px solid var(--accent);
+            margin-bottom: 25px;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
+            animation: float 4s ease-in-out infinite;
+            object-fit: cover;
+        }
+
+        .cyberpunk-title {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: bold;
+            color: var(--accent);
+            text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent), -3px -3px 0 var(--gold), 3px 3px 0 var(--gold);
+            letter-spacing: 5px;
+            margin-bottom: 10px;
+            animation: glitch 3s infinite;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--gold);
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px var(--gold);
+            margin-bottom: 40px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 15px 35px;
+            border: 2px solid var(--accent);
+            background: transparent;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .youtube-btn {
+            border-color: #ff0000;
+            color: #fff;
+            text-shadow: 0 0 5px #fff;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+        }
+
+        .youtube-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,0,0,0.4), #ff0000);
+            transition: left 0.4s ease;
+            z-index: -1;
+        }
+
+        .youtube-btn:hover {
+            box-shadow: 0 0 30px #ff0000;
+        }
+        
+        .youtube-btn:hover::before {
+            left: 0;
+        }
+
+        /* Sections */
+        section {
+            margin: 100px 0;
+            padding: 60px 40px;
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            display: flex;
+            align-items: center;
+        }
+
+        .title-prefix {
+            color: var(--accent);
+            font-size: 3rem;
+            margin-right: 20px;
+            text-shadow: 0 0 10px var(--accent);
+        }
+
+        .section-title h2 {
+            color: var(--accent);
+            letter-spacing: 3px;
+            text-shadow: 0 0 15px var(--accent);
+            font-size: 2rem;
+            text-transform: uppercase;
+        }
+
+        /* About Section */
+        .about {
+            background: rgba(10, 14, 39, 0.7);
+            border-left: 4px solid var(--accent);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.05);
+        }
+
+        .about-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .skill-item {
+            background: rgba(18, 24, 59, 0.6);
+            padding: 25px;
+            border: 1px solid var(--accent);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .skill-name {
+            font-weight: bold;
+            color: var(--accent);
+            letter-spacing: 2px;
+        }
+
+        .skill-percentage {
+            color: var(--gold);
+            font-weight: bold;
+        }
+
+        .skill-bar-container {
+            width: 100%;
+            height: 25px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #b8860b 0%, var(--gold) 50%, var(--gold-light) 100%);
+            width: 0; /* Starts at 0 for animation */
+            position: relative;
+            box-shadow: 0 0 15px var(--gold);
+            transition: width 1.5s cubic-bezier(0.1, 0.5, 0.1, 1);
+        }
+
+        /* Expertise Cards */
+        .expertise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .expertise-card {
+            background: rgba(10, 14, 39, 0.8);
+            padding: 30px;
+            border: 1px solid var(--accent);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .expertise-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
+        }
+
+        .expertise-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .expertise-card h3 {
+            color: var(--gold);
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        /* Projects */
+        .project-card {
+            display: block;
+            background: rgba(10, 14, 39, 0.8);
+            border: 1px solid var(--accent);
+            padding: 30px;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .project-card:hover {
+            border-color: var(--gold);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .project-header h3 {
+            color: var(--accent);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .project-tag {
+            background: var(--gold);
+            color: var(--primary);
+            padding: 3px 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        
+        .tech-stack {
+            display: block;
+            margin-top: 20px;
+            color: var(--gold-light);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(0, 212, 255, 0.3);
+            padding-top: 15px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px;
+            border-top: 1px solid var(--accent);
+            color: var(--text-muted);
+        }
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes glitch {
+            0%, 100% { text-shadow: 0 0 10px var(--accent), -2px -2px 0 var(--gold); }
+            50% { text-shadow: 0 0 20px var(--accent), 2px 2px 0 #ff003c; }
+        }
+
+        /* Particles */
+        .particle {
+            position: absolute;
+            background: var(--gold-light);
+            border-radius: 50%;
+            pointer-events: none;
+            box-shadow: 0 0 8px var(--gold);
+            animation: fadeOutParticle 1s forwards;
+        }
+
+        @keyframes fadeOutParticle {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0) translate(20px, -20px); }
+        }
+        
+        @media (max-width: 768px) {
+            .cyberpunk-title { font-size: 2.5rem; }
+            section { padding: 40px 20px; }
+            .section-title { flex-direction: column; align-items: flex-start; }
+            .title-prefix { margin-bottom: 10px; }
+        }
+    </style>
 </head>
 <body>
-    <!-- Loading Screen -->
+
     <div class="loading-screen" id="loadingScreen">
-        <div class="loading-container">
-            <div class="loading-text">Cargando :)....</div>
-            <div class="loading-dots">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
+        <div class="loading-text">Cargando :).....</div>
     </div>
 
-    <!-- Main Content -->
-    <div class="container" id="mainContent" style="opacity: 0;">
-        <!-- Header/Hero Section -->
+    <div class="container" id="mainContent">
+        
         <header class="hero">
             <div class="hero-content">
-                <div class="profile-section">
-                    <img src="https://avatars.githubusercontent.com/u/93453212?v=4" alt="Dr1xyDev" class="profile-pic">
-                    <h1 class="cyberpunk-title">DR1XYDEV</h1>
-                    <p class="subtitle">Developer | Gamer | 3D Enthusiast</p>
-                </div>
-                
+                <img src="https://avatars.githubusercontent.com/u/93453212?v=4" alt="Dr1xyDev" class="profile-pic">
+                <h1 class="cyberpunk-title">DR1XYDEV</h1>
+                <p class="subtitle">Dev Blog | Programmer | Gamer</p>
                 <div class="social-buttons">
                     <a href="https://www.youtube.com/@Dr1xyDev" target="_blank" class="btn youtube-btn">
-                        <span class="btn-icon">▶</span>
-                        YouTube Channel
+                        ▶ YouTube Channel
                     </a>
                 </div>
             </div>
         </header>
 
-        <!-- About Section -->
         <section class="about" id="about">
             <div class="section-title">
                 <span class="title-prefix">//</span>
-                <h2>ACERCA DE MÍ</h2>
+                <h2>Presentación</h2>
             </div>
             <div class="about-content">
-                <p>Soy un desarrollador apasionado por la programación y la creación de contenido. Tengo experiencia en desarrollo web, scripting de servidores y estoy explorando el mundo del desarrollo de videojuegos. Mi pasión es crear proyectos innovadores y compartir mi conocimiento con la comunidad.</p>
+                <p>Hola, soy Luis. Soy un desarrollador apasionado por la programación, la modificación de cores y la creación de entornos interactivos. Tengo una fuerte inclinación hacia el backend, el scripting de servidores y actualmente me encuentro explorando a fondo el fascinante mundo del desarrollo de videojuegos.</p>
+                <p>Me gusta experimentar con nuevas mecánicas de supervivencia, exprimir el rendimiento del código y siempre estoy buscando aprender herramientas nuevas para darle vida a mis ideas.</p>
             </div>
         </section>
 
-        <!-- Skills Section -->
         <section class="skills" id="skills">
             <div class="section-title">
                 <span class="title-prefix">//</span>
-                <h2>LENGUAJES DE PROGRAMACIÓN</h2>
+                <h2>Lenguajes de Programación</h2>
             </div>
-            
             <div class="skills-grid">
                 <div class="skill-item">
                     <div class="skill-header">
@@ -64,121 +431,178 @@
                         <span class="skill-percentage">76%</span>
                     </div>
                     <div class="skill-bar-container">
-                        <div class="skill-bar" style="--percentage: 76%">
-                            <div class="skill-particles"></div>
-                        </div>
+                        <div class="skill-bar" data-width="76%"></div>
                     </div>
                 </div>
-
                 <div class="skill-item">
                     <div class="skill-header">
                         <span class="skill-name">GDScript</span>
                         <span class="skill-percentage">26%</span>
                     </div>
                     <div class="skill-bar-container">
-                        <div class="skill-bar" style="--percentage: 26%">
-                            <div class="skill-particles"></div>
-                        </div>
+                        <div class="skill-bar" data-width="26%"></div>
                     </div>
                 </div>
-
                 <div class="skill-item">
                     <div class="skill-header">
-                        <span class="skill-name">HTML</span>
-                        <span class="skill-percentage">37.6%</span>
+                        <span class="skill-name">HTML / CSS</span>
+                        <span class="skill-percentage">45%</span>
                     </div>
                     <div class="skill-bar-container">
-                        <div class="skill-bar" style="--percentage: 37.6%">
-                            <div class="skill-particles"></div>
-                        </div>
+                        <div class="skill-bar" data-width="45%"></div>
                     </div>
                 </div>
-
-                <div class="skill-item">
-                    <div class="skill-header">
-                        <span class="skill-name">CSS</span>
-                        <span class="skill-percentage">48.5%</span>
-                    </div>
-                    <div class="skill-bar-container">
-                        <div class="skill-bar" style="--percentage: 48.5%">
-                            <div class="skill-particles"></div>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="skill-item">
                     <div class="skill-header">
                         <span class="skill-name">JavaScript</span>
-                        <span class="skill-percentage">13.9%</span>
+                        <span class="skill-percentage">15%</span>
                     </div>
                     <div class="skill-bar-container">
-                        <div class="skill-bar" style="--percentage: 13.9%">
-                            <div class="skill-particles"></div>
-                        </div>
+                        <div class="skill-bar" data-width="15%"></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Expertise Section -->
         <section class="expertise" id="expertise">
             <div class="section-title">
                 <span class="title-prefix">//</span>
-                <h2>ESPECIALIDADES</h2>
+                <h2>Conocimientos</h2>
             </div>
-            
             <div class="expertise-grid">
                 <div class="expertise-card">
                     <div class="expertise-icon">🎮</div>
                     <h3>Godot Engine</h3>
-                    <p>Novato en el entorno del Motor de Videojuegos Godot Engine, aprendiendo desarrollo de juegos con GDScript.</p>
+                    <p>Novato en el entorno del Motor de Videojuegos Godot. Actualmente aprendiendo físicas, mecánicas de supervivencia y programación con GDScript.</p>
                 </div>
-
                 <div class="expertise-card">
-                    <div class="expertise-icon">🎨</div>
+                    <div class="expertise-icon">🧊</div>
                     <h3>Modelado 3D</h3>
-                    <p>Tengo conocimientos básicos en modelado 3D, explorando técnicas de creación de modelos y texturas.</p>
+                    <p>Conocimientos básicos (sé poco aún) de modelado 3D, enfocado en aprender a texturizar y crear assets elementales para videojuegos.</p>
                 </div>
-
                 <div class="expertise-card">
-                    <div class="expertise-icon">💻</div>
-                    <h3>Desarrollo Web</h3>
-                    <p>Experiencia en desarrollo web con HTML, CSS y JavaScript, creando sitios web funcionales y responsivos.</p>
+                    <div class="expertise-icon">⚙️</div>
+                    <h3>Server Cores</h3>
+                    <p>Experiencia modificando estructuras y cores, optimización de sistemas y generación de mundos en entornos de servidores.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Projects Section -->
         <section class="projects" id="projects">
             <div class="section-title">
                 <span class="title-prefix">//</span>
-                <h2>PROYECTOS</h2>
+                <h2>Proyectos Destacados</h2>
             </div>
-
             <div class="projects-grid">
                 <a href="https://github.com/Dr1xyDev/Syrim-PMMP-Legacy" target="_blank" class="project-card">
                     <div class="project-header">
-                        <h3>Syrim PMMP Legacy</h3>
-                        <span class="project-tag">PocketMineMP</span>
+                        <h3>Syrim-PMMP-Legacy</h3>
                     </div>
-                    <div class="project-description">
-                        <p>Proyecto de PocketMineMP vanilla para MCPE 1.1.5 con generación vanilla y muchas características nuevas. Un servidor personalizado con múltiples mejoras y funcionalidades innovadoras.</p>
-                    </div>
-                    <div class="project-footer">
-                        <span class="tech-stack">PHP • PocketMine</span>
-                        <span class="github-link">Ver en GitHub →</span>
-                    </div>
+                    <span class="project-tag">PocketMine-MP</span>
+                    <p>Proyecto de PocketMine-MP vanilla para MCPE 1.1.5. Cuenta con generación vanilla precisa y está repleto de muchas características nuevas y sistemas mejorados.</p>
+                    <span class="tech-stack">Tecnologías: PHP • API 3.0.0</span>
                 </a>
             </div>
         </section>
 
-        <!-- Footer -->
         <footer class="footer">
-            <p>© 2024 Dr1xyDev. All rights reserved.</p>
-            <p>Sígueme en <a href="https://github.com/Dr1xyDev">GitHub</a> y <a href="https://www.youtube.com/@Dr1xyDev">YouTube</a></p>
+            <p>© 2024 Dr1xyDev. Estilo Ciberpunk activado.</p>
+            <p><a href="https://www.youtube.com/@Dr1xyDev" target="_blank">YouTube</a> | <a href="https://github.com/Dr1xyDev" target="_blank">GitHub</a></p>
         </footer>
+
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // 1. Lógica de la pantalla de carga inicial
+        window.addEventListener('load', () => {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const mainContent = document.getElementById('mainContent');
+            
+            // Simular un tiempo mínimo de carga para el efecto ciberpunk
+            setTimeout(() => {
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                    mainContent.style.opacity = '1';
+                    
+                    // Inicializar animaciones de scroll justo después de cargar
+                    initScrollAnimations();
+                }, 500);
+            }, 1500); 
+        });
+
+        // 2. Generador de Partículas para las barras de progreso
+        function spawnParticles(barElement) {
+            // Detener si la barra no está activa
+            if(barElement.style.width === '0px' || barElement.style.width === '') return;
+            
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            // Tamaño aleatorio
+            const size = Math.random() * 4 + 2;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            
+            // Posición al final de la barra actual
+            particle.style.right = '0px';
+            particle.style.top = `${Math.random() * 20}px`;
+            
+            barElement.appendChild(particle);
+            
+            // Limpiar la partícula del DOM después de la animación
+            setTimeout(() => {
+                particle.remove();
+            }, 1000);
+        }
+
+        // 3. Observer para animar las barras de porcentaje y las secciones (aparecer/desaparecer)
+        function initScrollAnimations() {
+            const sections = document.querySelectorAll('section');
+            const skillBars = document.querySelectorAll('.skill-bar');
+            
+            // Intervalo global para las partículas
+            let particleInterval;
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    // Animación de aparición de secciones
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        
+                        // Si es la sección de skills, animamos las barras
+                        if (entry.target.id === 'skills') {
+                            skillBars.forEach(bar => {
+                                const targetWidth = bar.getAttribute('data-width');
+                                bar.style.width = targetWidth;
+                            });
+                            
+                            // Activar emisión de partículas
+                            if(!particleInterval) {
+                                particleInterval = setInterval(() => {
+                                    skillBars.forEach(bar => spawnParticles(bar));
+                                }, 150);
+                            }
+                        }
+                    } else {
+                        // Animación de desaparición de secciones (para que se vuelva a llenar al bajar y subir)
+                        entry.target.classList.remove('visible');
+                        
+                        if (entry.target.id === 'skills') {
+                            skillBars.forEach(bar => {
+                                bar.style.width = '0'; // Reiniciar barras
+                            });
+                            
+                            // Detener partículas
+                            clearInterval(particleInterval);
+                            particleInterval = null;
+                        }
+                    }
+                });
+            }, { threshold: 0.15 });
+
+            sections.forEach(section => observer.observe(section));
+        }
+    </script>
 </body>
 </html>
