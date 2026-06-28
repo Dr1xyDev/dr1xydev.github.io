@@ -1,2 +1,2 @@
 # dr1xydev.github.io
-Web
+dr1xydev.github.io
