@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADMIN // DR1XYDEV</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+:root{
+  --bg:#070a0e;--panel:#0f141b;--panel2:#141a23;--border:#212a35;
+  --accent:#4ea1ff;--accent-dim:#2c6cc4;--accent-glow:rgba(78,161,255,0.25);
+  --text:#e9edf2;--muted:#71808f;--danger:#ff5c6c;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospace;}
+h1,h2,h3{font-family:'Space Grotesk',sans-serif;margin:0;}
+a{color:var(--accent);text-decoration:none;}
+
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;padding:14px 22px;border-bottom:1px solid var(--border);
+  position:sticky;top:0;background:rgba(7,10,14,0.92);backdrop-filter:blur(6px);z-index:30;
+}
+.topbar .title{color:var(--accent);font-size:13px;letter-spacing:.08em;}
+.topbar .actions{display:flex;gap:10px;flex-wrap:wrap;}
+.btn{
+  border:1px solid var(--border);background:var(--panel2);color:var(--text);padding:8px 14px;
+  font-family:'JetBrains Mono';font-size:12px;cursor:pointer;border-radius:5px;transition:.2s;
+}
+.btn:hover{border-color:var(--accent);color:var(--accent);}
+.btn.primary{background:var(--accent);color:#05080c;border-color:var(--accent);font-weight:700;}
+.btn.primary:hover{box-shadow:0 0 16px var(--accent-glow);}
+.btn.danger:hover{border-color:var(--danger);color:var(--danger);}
+
+.wrap{max-width:920px;margin:0 auto;padding:26px 18px 80px;}
+.notice{
+  border:1px solid var(--accent-dim);background:rgba(78,161,255,0.06);padding:14px 16px;border-radius:6px;
+  font-size:12px;color:#b9d4f5;line-height:1.6;margin-bottom:24px;
+}
+.notice b{color:var(--accent);}
+
+.card{background:var(--panel);border:1px solid var(--border);padding:20px;margin-bottom:22px;border-radius:6px;}
+.card h2{font-size:15px;color:var(--accent);letter-spacing:.06em;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;}
+.field{
+  background:var(--panel2);border:1px solid var(--border);color:var(--text);padding:9px 11px;
+  font-family:'JetBrains Mono';font-size:12.5px;width:100%;margin-bottom:10px;border-radius:4px;
+}
+textarea.field{resize:vertical;min-height:70px;}
+.mini-label{font-size:10px;color:var(--muted);margin-bottom:4px;display:block;letter-spacing:.06em;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:560px){.row2{grid-template-columns:1fr;}}
+.item-block{border:1px solid var(--border);border-radius:5px;padding:14px;margin-bottom:12px;position:relative;background:var(--panel2);}
+.item-block .del{
+  position:absolute;top:8px;right:8px;width:24px;height:24px;border:1px solid var(--border);background:var(--panel);
+  color:var(--muted);border-radius:4px;cursor:pointer;font-size:13px;
+}
+.item-block .del:hover{color:var(--danger);border-color:var(--danger);}
+.subitem{border-left:2px solid var(--accent-dim);padding-left:12px;margin-bottom:10px;}
+.add-btn{
+  border:1px dashed var(--border);color:var(--muted);background:transparent;padding:10px 16px;
+  font-family:'JetBrains Mono';font-size:12px;cursor:pointer;width:100%;border-radius:5px;
+}
+.add-btn:hover{border-color:var(--accent);color:var(--accent);}
+.tag-chip-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px;}
+.toast{
+  position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--accent);color:#05080c;
+  padding:9px 18px;font-size:12px;font-weight:700;border-radius:5px;z-index:60;opacity:0;pointer-events:none;transition:opacity .25s;
+}
+.toast.show{opacity:1;}
+#exportBox{
+  display:none;margin-top:10px;
+}
+#exportBox.open{display:block;}
+#exportArea{width:100%;height:220px;background:#05080c;color:#9fe0a0;font-size:11px;border:1px solid var(--border);border-radius:5px;padding:10px;}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="title">⚙ PANEL ADMIN // DR1XYDEV</div>
+  <div class="actions">
+    <a href="index.html" class="btn">← VOLVER AL SITIO</a>
+    <button class="btn" id="exportBtn">EXPORTAR JSON</button>
+    <button class="btn danger" id="resetBtn">RESTABLECER</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="notice">
+    Los cambios se guardan automáticamente en este navegador y ya se ven en <b>index.html</b> al abrirlo aquí mismo.
+    Para que <b>todos los visitantes</b> vean los cambios (otros dispositivos), pulsa <b>EXPORTAR JSON</b>, copia el resultado
+    y reemplázalo en la constante <b>DEFAULT_DATA</b> dentro de <b>index.html</b>, luego sube los cambios a tu repositorio.
+  </div>
+  <div id="exportBox">
+    <textarea id="exportArea" readonly></textarea>
+    <button class="btn" id="copyExport" style="margin-top:8px;">COPIAR AL PORTAPAPELES</button>
+  </div>
+
+  <div id="adminRoot"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const LS_KEY="dr1xydev_site_data";
+const DEFAULT_DATA = {
+  profile:{
+    name:"DR1XYDEV",
+    tagline:"DESARROLLADOR DE PLUGINS PMMP Y HERRAMIENTAS ANDROID",
+    role:"DESARROLLADOR / DEV ANDROID",
+    level:"FULL-STACK EN PROGRESO",
+    bio:"Desarrollo en Android usando Termux y AIDE: forks de PocketMine-MP, plugins, bots de WhatsApp y herramientas para la comunidad DreamWix. Me interesa Rust, la generación de mundos y la ingeniería inversa de clientes MCPE. Sigo aprendiendo todos los días.",
+    tags:["DREAMWIX","PMMP","ANDROID DEV"]
+  },
+  status:[{k:"BUILD",v:"ESTABLE"},{k:"STACK",v:"PHP / JAVA / RUST"},{k:"UPTIME",v:"24/7"}],
+  skills:[
+    {category:"LENGUAJES",items:[{name:"PHP",percent:90},{name:"JAVA",percent:65},{name:"RUST",percent:30}]},
+    {category:"MINECRAFT",items:[{name:"POCKETMINE-MP",percent:95},{name:"PLUGINS / API",percent:85},{name:"GENERACIÓN DE MUNDOS",percent:60}]},
+    {category:"HERRAMIENTAS",items:[{name:"GIT",percent:85},{name:"TERMUX / AIDE",percent:90},{name:"PTERODACTYL",percent:75}]}
+  ],
+  projects:[
+    {title:"3D Builder MC",tags:["RUST","JNI","ANDROID"],description:"Editor de modelado 3D estilo Minecraft con UI tipo Blender.",link:"",repo:""},
+    {title:"DreamWix Bot",tags:["NODE.JS","BAILEYS"],description:"Bot de WhatsApp alojado en Pterodactyl.",link:"",repo:""},
+    {title:"Iluminus",tags:["PMMP","PHP"],description:"Fork de PocketMine-MP optimizado para CPU.",link:"",repo:""}
+  ],
+  links:[
+    {label:"GITHUB",category:"CÓDIGO",icon:"github",url:"https://github.com/"},
+    {label:"DISCORD",category:"CONTACTO",icon:"discord",url:""},
+    {label:"TELEGRAM",category:"CONTACTO",icon:"telegram",url:""},
+    {label:"CORREO",category:"CONTACTO",icon:"mail",url:""}
+  ]
+};
+const ICON_KEYS=["github","telegram","discord","mail","link"];
+
+function loadData(){
+  try{
+    const raw=localStorage.getItem(LS_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return JSON.parse(JSON.stringify(DEFAULT_DATA));
+}
+let state=loadData();
+
+function save(){
+  try{
+    localStorage.setItem(LS_KEY,JSON.stringify(state));
+    showToast("GUARDADO");
+  }catch(e){ showToast("ERROR AL GUARDAR"); }
+}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),1300);
+}
+function getByPath(o,p){return p.split('.').reduce((a,k)=>a==null?undefined:a[k],o);}
+function setByPath(o,p,v){const k=p.split('.');let c=o;for(let i=0;i<k.length-1;i++)c=c[k[i]];c[k[k.length-1]]=v;}
+
+function render(){
+  document.getElementById('adminRoot').innerHTML = profileCard()+statusCard()+skillsCard()+projectsCard()+linksCard();
+  bindAll();
+}
+
+/* ---------- PROFILE ---------- */
+function profileCard(){
+  const p=state.profile;
+  return `
+  <div class="card">
+    <h2>PERFIL / SOBRE MÍ</h2>
+    <span class="mini-label">NOMBRE</span>
+    <input class="field" data-field="profile.name" value="${esc(p.name)}">
+    <div class="row2">
+      <div><span class="mini-label">ROL</span><input class="field" data-field="profile.role" value="${esc(p.role)}"></div>
+      <div><span class="mini-label">NIVEL</span><input class="field" data-field="profile.level" value="${esc(p.level)}"></div>
+    </div>
+    <span class="mini-label">TAGLINE (PORTADA)</span>
+    <input class="field" data-field="profile.tagline" value="${esc(p.tagline)}">
+    <span class="mini-label">BIO</span>
+    <textarea class="field" data-field="profile.bio">${esc(p.bio)}</textarea>
+    <span class="mini-label">ETIQUETAS</span>
+    <div class="tag-chip-row" id="tagChips">
+      ${p.tags.map((t,i)=>`<input class="field" style="width:auto;flex:1 1 140px;" data-tag-idx="${i}" value="${esc(t)}">`).join('')}
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="add-btn" data-action="add-tag">+ etiqueta</button>
+      <button class="btn danger" data-action="del-last-tag" style="width:auto;white-space:nowrap;">− quitar última</button>
+    </div>
+  </div>`;
+}
+
+/* ---------- STATUS ---------- */
+function statusCard(){
+  return `
+  <div class="card">
+    <h2>ESTADÍSTICAS (INICIO)</h2>
+    ${state.status.map((s,i)=>`
+      <div class="item-block">
+        <button class="del" data-action="del-status" data-idx="${i}">×</button>
+        <div class="row2">
+          <div><span class="mini-label">CLAVE</span><input class="field" data-field="status.${i}.k" value="${esc(s.k)}"></div>
+          <div><span class="mini-label">VALOR</span><input class="field" data-field="status.${i}.v" value="${esc(s.v)}"></div>
+        </div>
+      </div>`).join('')}
+    <button class="add-btn" data-action="add-status">+ estadística</button>
+  </div>`;
+}
+
+/* ---------- SKILLS ---------- */
+function skillsCard(){
+  return `
+  <div class="card">
+    <h2>HABILIDADES</h2>
+    ${state.skills.map((g,gi)=>`
+      <div class="item-block">
+        <button class="del" data-action="del-group" data-gi="${gi}">×</button>
+        <span class="mini-label">CATEGORÍA</span>
+        <input class="field" data-field="skills.${gi}.category" value="${esc(g.category)}">
+        ${g.items.map((it,ii)=>`
+          <div class="subitem">
+            <div class="row2">
+              <div><span class="mini-label">NOMBRE</span><input class="field" data-field="skills.${gi}.items.${ii}.name" value="${esc(it.name)}"></div>
+              <div><span class="mini-label">PORCENTAJE</span><input class="field" type="number" min="0" max="100" data-field-num="skills.${gi}.items.${ii}.percent" value="${it.percent}"></div>
+            </div>
+            <button class="btn danger" data-action="del-skill" data-gi="${gi}" data-ii="${ii}" style="width:auto;">− quitar habilidad</button>
+          </div>`).join('')}
+        <button class="add-btn" data-action="add-skill" data-gi="${gi}">+ habilidad</button>
+      </div>`).join('')}
+    <button class="add-btn" data-action="add-group">+ categoría</button>
+  </div>`;
+}
+
+/* ---------- PROJECTS ---------- */
+function projectsCard(){
+  return `
+  <div class="card">
+    <h2>PROYECTOS</h2>
+    ${state.projects.map((pr,i)=>`
+      <div class="item-block">
+        <button class="del" data-action="del-project" data-idx="${i}">×</button>
+        <span class="mini-label">TÍTULO</span>
+        <input class="field" data-field="projects.${i}.title" value="${esc(pr.title)}">
+        <span class="mini-label">ETIQUETAS (separadas por coma)</span>
+        <input class="field" data-tags-idx="${i}" value="${esc(pr.tags.join(', '))}">
+        <span class="mini-label">DESCRIPCIÓN</span>
+        <textarea class="field" data-field="projects.${i}.description">${esc(pr.description)}</textarea>
+        <div class="row2">
+          <div><span class="mini-label">ENLACE (opcional)</span><input class="field" data-field="projects.${i}.link" value="${esc(pr.link||'')}" placeholder="https://..."></div>
+          <div><span class="mini-label">REPO GITHUB (owner/repo) para README</span><input class="field" data-field="projects.${i}.repo" value="${esc(pr.repo||'')}" placeholder="usuario/repositorio"></div>
+        </div>
+      </div>`).join('')}
+    <button class="add-btn" data-action="add-project">+ proyecto</button>
+  </div>`;
+}
+
+/* ---------- LINKS ---------- */
+function linksCard(){
+  return `
+  <div class="card">
+    <h2>LINKS</h2>
+    ${state.links.map((l,i)=>`
+      <div class="item-block">
+        <button class="del" data-action="del-link" data-idx="${i}">×</button>
+        <div class="row2">
+          <div><span class="mini-label">ETIQUETA</span><input class="field" data-field="links.${i}.label" value="${esc(l.label)}"></div>
+          <div><span class="mini-label">CATEGORÍA</span><input class="field" data-field="links.${i}.category" value="${esc(l.category)}"></div>
+        </div>
+        <div class="row2">
+          <div><span class="mini-label">URL</span><input class="field" data-field="links.${i}.url" value="${esc(l.url||'')}" placeholder="https://..."></div>
+          <div>
+            <span class="mini-label">ICONO</span>
+            <select class="field" data-field="links.${i}.icon">
+              ${ICON_KEYS.map(k=>`<option value="${k}" ${l.icon===k?'selected':''}>${k}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+      </div>`).join('')}
+    <button class="add-btn" data-action="add-link">+ link</button>
+  </div>`;
+}
+
+function esc(s){ return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function uid(){ return Math.random().toString(36).slice(2,9); }
+
+/* ---------- EVENTS ---------- */
+function bindAll(){
+  document.querySelectorAll('input.field[data-field], textarea.field[data-field]').forEach(el=>{
+    el.addEventListener('input',()=>{ setByPath(state,el.getAttribute('data-field'),el.value); save(); });
+  });
+  document.querySelectorAll('select.field[data-field]').forEach(el=>{
+    el.addEventListener('change',()=>{ setByPath(state,el.getAttribute('data-field'),el.value); save(); render(); });
+  });
+  document.querySelectorAll('input[data-field-num]').forEach(el=>{
+    el.addEventListener('input',()=>{ setByPath(state,el.getAttribute('data-field-num'),parseFloat(el.value)||0); save(); });
+  });
+  document.querySelectorAll('input[data-tag-idx]').forEach(el=>{
+    el.addEventListener('input',()=>{ state.profile.tags[parseInt(el.getAttribute('data-tag-idx'))]=el.value; save(); });
+  });
+  document.querySelectorAll('input[data-tags-idx]').forEach(el=>{
+    el.addEventListener('change',()=>{
+      const idx=parseInt(el.getAttribute('data-tags-idx'));
+      state.projects[idx].tags=el.value.split(',').map(s=>s.trim()).filter(Boolean);
+      save();
+    });
+  });
+
+  document.querySelectorAll('[data-action]').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const a=el.getAttribute('data-action');
+      const idx=el.getAttribute('data-idx');
+      const gi=el.getAttribute('data-gi');
+      const ii=el.getAttribute('data-ii');
+      switch(a){
+        case 'add-tag': state.profile.tags.push("NUEVA"); break;
+        case 'del-last-tag': state.profile.tags.pop(); break;
+        case 'add-status': state.status.push({k:"NUEVO",v:"VALOR"}); break;
+        case 'del-status': state.status.splice(idx,1); break;
+        case 'add-group': state.skills.push({category:"NUEVA CATEGORÍA",items:[]}); break;
+        case 'del-group': state.skills.splice(gi,1); break;
+        case 'add-skill': state.skills[gi].items.push({name:"NUEVA",percent:50}); break;
+        case 'del-skill': state.skills[gi].items.splice(ii,1); break;
+        case 'add-project': state.projects.push({title:"NUEVO PROYECTO",tags:[],description:"Descripción...",link:"",repo:""}); break;
+        case 'del-project': state.projects.splice(idx,1); break;
+        case 'add-link': state.links.push({label:"NUEVO",category:"OTROS",icon:"link",url:""}); break;
+        case 'del-link': state.links.splice(idx,1); break;
+      }
+      save(); render();
+    });
+  });
+}
+
+document.getElementById('resetBtn').onclick=()=>{
+  if(confirm("¿Restablecer todo el contenido a los valores por defecto? Esto no se puede deshacer.")){
+    state=JSON.parse(JSON.stringify(DEFAULT_DATA));
+    save(); render();
+  }
+};
+document.getElementById('exportBtn').onclick=()=>{
+  const box=document.getElementById('exportBox');
+  const area=document.getElementById('exportArea');
+  area.value = "const DEFAULT_DATA = " + JSON.stringify(state,null,2) + ";";
+  box.classList.toggle('open');
+};
+document.getElementById('copyExport').onclick=()=>{
+  const area=document.getElementById('exportArea');
+  area.select();
+  navigator.clipboard?.writeText(area.value).then(()=>showToast("COPIADO"));
+};
+
+render();
+</script>
+</body>
+</html>
